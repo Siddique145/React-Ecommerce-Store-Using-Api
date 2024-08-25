@@ -10,12 +10,11 @@ function Api() {
       .then((res) => res.json())
       .then((data) => {
         setPosts(data);
-        console.log("Api is ready to use", setPosts);
       })
       .catch((error) => console.log("ERROR", error));
   }, []);
 
-  let filteredPosts = posts.filter((post) => {
+  const filteredPosts = posts.filter((post) => {
     const searchTerm = search.toLowerCase();
     return (
       post.title.toLowerCase().includes(searchTerm) ||
@@ -38,7 +37,9 @@ function Api() {
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-indigo-200 via-purple-200 to-pink-200 p-6">
-      <h1 className="text-4xl font-bold text-center text-gray-800 mb-6">Product Search</h1>
+      <h1 className="text-4xl font-bold text-center text-gray-800 mb-6">
+        Product Search
+      </h1>
       <div className="max-w-lg mx-auto mb-8 flex items-center">
         <input
           type="text"
@@ -56,7 +57,7 @@ function Api() {
           {filteredPosts.map((post) => (
             <div
               key={post.id}
-              className="bg-white p-6 rounded-lg shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300"
+              className="bg-white flex flex-col p-6 rounded-lg shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300"
             >
               <img
                 src={post.image}
@@ -69,27 +70,31 @@ function Api() {
               <h2 className="text-lg text-gray-900 font-semibold title-font mb-2">
                 {post.title}
               </h2>
-              <p className="leading-relaxed text-base text-gray-600">
+              <p className="leading-relaxed text-base text-gray-600 mb-4">
                 ${post.price}
               </p>
-              {isInCart(post) ? (
-                <div className="mt-4">
-                  <p className="text-green-500 font-semibold mb-2">Added to Cart</p>
+              <div className="mt-auto">
+                {isInCart(post) ? (
+                  <div>
+                    <p className="text-green-500 font-semibold mb-2">
+                      Added to Cart
+                    </p>
+                    <button
+                      onClick={() => removeFromCart(post)}
+                      className="w-full text-white bg-red-500 py-2 rounded-lg shadow-md hover:bg-red-600 transition-all duration-300"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                ) : (
                   <button
-                    onClick={() => removeFromCart(post)}
-                    className="w-full text-white bg-red-500 py-2 rounded-lg shadow-md hover:bg-red-600 transition-all duration-300"
+                    onClick={() => addToCart(post)}
+                    className="w-full text-white bg-indigo-500 py-2 rounded-lg shadow-md hover:bg-indigo-600 transition-all duration-300"
                   >
-                    Cancel
+                    Add to Cart
                   </button>
-                </div>
-              ) : (
-                <button
-                  onClick={() => addToCart(post)}
-                  className="mt-4 w-full text-white bg-indigo-500 py-2 rounded-lg shadow-md hover:bg-indigo-600 transition-all duration-300"
-                >
-                  Add to Cart
-                </button>
-              )}
+                )}
+              </div>
             </div>
           ))}
         </div>
